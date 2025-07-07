@@ -1,3 +1,10 @@
+-- Drop tables if they exist to ensure a clean migration
+DROP TABLE IF EXISTS field_availability CASCADE;
+DROP TABLE IF EXISTS field_facilities CASCADE;
+DROP TABLE IF EXISTS fields CASCADE;
+DROP TABLE IF EXISTS facilities CASCADE;
+DROP TABLE IF EXISTS sport_types CASCADE;
+
 -- Create sport_types table
 CREATE TABLE IF NOT EXISTS sport_types (
   id SERIAL PRIMARY KEY,
@@ -25,13 +32,12 @@ CREATE TABLE IF NOT EXISTS fields (
   sport_type VARCHAR(50), -- Keep for backward compatibility
   rating DECIMAL(3,2) DEFAULT 0,
   reviews_count INTEGER DEFAULT 0,
-  main_image_url TEXT,
   capacity INTEGER NOT NULL,
   availability_summary VARCHAR(100),
   price_per_hour DECIMAL(10,2) NOT NULL,
   currency VARCHAR(10) DEFAULT 'Rp',
   description TEXT,
-  images TEXT[] DEFAULT '{}',
+  images TEXT,
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

@@ -1,3 +1,13 @@
+-- Drop bookings-related tables if they exist
+DROP TABLE IF EXISTS booking_status_history CASCADE;
+DROP TABLE IF EXISTS booking_payments CASCADE;
+DROP TABLE IF EXISTS bookings CASCADE;
+DROP TABLE IF EXISTS booking_reviews CASCADE;
+
+-- Drop enum types if they exist
+DROP TYPE IF EXISTS booking_status CASCADE;
+DROP TYPE IF EXISTS payment_status CASCADE;
+
 -- Create booking_status enum
 CREATE TYPE booking_status AS ENUM (
   'pending',

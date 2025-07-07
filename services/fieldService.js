@@ -92,7 +92,6 @@ class FieldService {
           f.sport_type,
           f.rating,
           f.reviews_count,
-          f.main_image_url,
           f.capacity,
           f.availability_summary,
           f.price_per_hour,
@@ -106,7 +105,7 @@ class FieldService {
         LEFT JOIN facilities fac ON ff.facility_id = fac.id
         ${whereClause}
         GROUP BY f.id, f.name, f.location_summary, f.sport_type, f.rating, 
-                 f.reviews_count, f.main_image_url, f.capacity, f.availability_summary, 
+                 f.reviews_count, f.capacity, f.availability_summary, 
                  f.price_per_hour, f.currency, f.created_at, f.updated_at
         ORDER BY f.created_at DESC
         LIMIT $${valueIndex} OFFSET $${valueIndex + 1}
@@ -170,9 +169,6 @@ class FieldService {
 
       const field = fieldResult.rows[0];
 
-      // Images are now stored directly in the fields table as an array
-      // field.images is already available from the main query
-
       // Get availability
       const availabilityQuery = `
         SELECT day_of_week, start_time, end_time, is_available
@@ -213,9 +209,9 @@ class FieldService {
       const fieldQuery = `
         INSERT INTO fields (
           name, location_summary, address, sport_type, sport_type_id,
-          rating, reviews_count, main_image_url, capacity, availability_summary,
+          rating, reviews_count, capacity, availability_summary,
           price_per_hour, currency, description, images
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
         RETURNING *
       `;
 
@@ -234,13 +230,14 @@ class FieldService {
         sportTypeId,
         fieldData.rating || 0,
         fieldData.reviews_count || 0,
-        fieldData.main_image_url,
         fieldData.capacity,
-        fieldData.availability_summary,
+        typeof fieldData.availability_summary !== 'undefined'
+          ? fieldData.availability_summary
+          : '',
         fieldData.price_per_hour,
         fieldData.currency || 'Rp',
         fieldData.description,
-        fieldData.images || [],
+        fieldData.images || '',
       ]);
 
       const field = fieldResult.rows[0];
@@ -321,8 +318,13 @@ class FieldService {
       const values = [];
       let valueIndex = 1;
 
+      // Only update fields that are explicitly provided and not undefined
       Object.keys(updateData).forEach(key => {
-        if (key !== 'facilities') {
+        if (
+          key !== 'facilities' &&
+          key !== 'key_facilities' &&
+          typeof updateData[key] !== 'undefined'
+        ) {
           updateFields.push(`${key} = $${valueIndex}`);
           values.push(updateData[key]);
           valueIndex++;
@@ -401,7 +403,7 @@ class FieldService {
   }
 
   /**
-   * Delete a field (soft delete)
+   * Delete a field (hard delete)
    * @param {number} fieldId - Field ID
    * @returns {Promise<boolean>} Success status
    */
@@ -409,9 +411,8 @@ class FieldService {
     try {
       const result = await pool.query(
         `
-        UPDATE fields 
-        SET is_active = false, updated_at = CURRENT_TIMESTAMP
-        WHERE id = $1 AND is_active = true
+        DELETE FROM fields
+        WHERE id = $1
         RETURNING id
       `,
         [fieldId]
@@ -420,15 +421,15 @@ class FieldService {
       const deleted = result.rows.length > 0;
 
       if (deleted) {
-        console.log('✅ FIELD DELETED:', { fieldId });
+        console.log('✅ FIELD HARD DELETED:', { fieldId });
       } else {
         console.log('⚠️ FIELD NOT FOUND OR ALREADY DELETED:', { fieldId });
       }
 
       return deleted;
     } catch (error) {
-      console.error('❌ FIELD DELETE ERROR:', error);
-      throw new Error('Failed to delete field');
+      console.error('❌ FIELD HARD DELETE ERROR:', error);
+      throw new Error('Failed to hard delete field');
     }
   }
 

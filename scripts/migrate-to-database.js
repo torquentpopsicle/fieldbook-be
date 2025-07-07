@@ -50,13 +50,36 @@ class DatabaseMigration {
         const sportTypeId = sportTypeResult.rows[0]?.id || null;
 
         // Insert field
+        // Get the first image from field-details.json if available
+        let imageUrl = '';
+        try {
+          const fieldDetailsData = JSON.parse(
+            fs.readFileSync(
+              path.join(this.dataPath, 'field-details.json'),
+              'utf8'
+            )
+          );
+          if (
+            fieldDetailsData[field.id] &&
+            Array.isArray(fieldDetailsData[field.id].images) &&
+            fieldDetailsData[field.id].images.length > 0
+          ) {
+            imageUrl = fieldDetailsData[field.id].images[0];
+          } else if (field.main_image_url) {
+            imageUrl = field.main_image_url;
+          }
+        } catch (e) {
+          if (field.main_image_url) {
+            imageUrl = field.main_image_url;
+          }
+        }
         const fieldResult = await this.pool.query(
           `
           INSERT INTO fields (
             id, name, location_summary, sport_type, sport_type_id, rating, 
-            reviews_count, main_image_url, capacity, availability_summary, 
+            reviews_count, capacity, availability_summary, 
             price_per_hour, currency, images
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
           ON CONFLICT (id) DO UPDATE SET
             name = EXCLUDED.name,
             location_summary = EXCLUDED.location_summary,
@@ -64,7 +87,6 @@ class DatabaseMigration {
             sport_type_id = EXCLUDED.sport_type_id,
             rating = EXCLUDED.rating,
             reviews_count = EXCLUDED.reviews_count,
-            main_image_url = EXCLUDED.main_image_url,
             capacity = EXCLUDED.capacity,
             availability_summary = EXCLUDED.availability_summary,
             price_per_hour = EXCLUDED.price_per_hour,
@@ -81,12 +103,11 @@ class DatabaseMigration {
             sportTypeId,
             field.rating,
             field.reviews_count,
-            field.main_image_url,
             field.capacity,
             field.availability_summary,
             field.price_per_hour,
             field.currency,
-            field.images || [],
+            imageUrl,
           ]
         );
 
@@ -173,7 +194,7 @@ class DatabaseMigration {
             SET images = $1
             WHERE id = $2
           `,
-            [details.images, fieldId]
+            [details.images[0], fieldId]
           );
         }
 

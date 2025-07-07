@@ -133,14 +133,9 @@ router.get('/fields', async (req, res) => {
  *               description:
  *                 type: string
  *                 example: "Premium indoor futsal facility"
- *               main_image_url:
- *                 type: string
- *                 example: "https://example.com/images/field.jpg"
  *               images:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["https://example.com/images/field1.jpg", "https://example.com/images/field2.jpg"]
+ *                 type: string
+ *                 example: "https://example.com/images/field1.jpg"
  *               facilities:
  *                 type: array
  *                 items:
@@ -209,7 +204,8 @@ router.post('/fields', async (req, res) => {
       currency: currency || 'Rp',
       facilities: key_facilities || [],
       description,
-      images: images || [],
+      images: images || '',
+      availability_summary: req.body.availability_summary || '',
     };
 
     const newField = await fieldService.createField(fieldData);
@@ -288,9 +284,6 @@ router.post('/fields', async (req, res) => {
  *                 items:
  *                   type: string
  *                 example: ["Outdoor", "Floodlights", "Parking"]
- *               main_image_url:
- *                 type: string
- *                 example: "https://example.com/images/updated_field.jpg"
  *               availability_summary:
  *                 type: string
  *                 example: "Available tomorrow"
@@ -317,7 +310,13 @@ router.post('/fields', async (req, res) => {
 router.put('/fields/:field_id', async (req, res) => {
   try {
     const { field_id } = req.params;
-    const updatedField = await fieldService.updateField(field_id, req.body);
+    // Build update data only with provided fields
+    const updateData = { ...req.body };
+    if (!('images' in req.body)) delete updateData.images;
+    if (!('availability_summary' in req.body))
+      delete updateData.availability_summary;
+
+    const updatedField = await fieldService.updateField(field_id, updateData);
 
     if (!updatedField) {
       return res.status(404).json({

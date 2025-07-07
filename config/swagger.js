@@ -19,7 +19,7 @@ const options = {
         description: 'Development server',
       },
       {
-        url: 'https://fieldbook-be.vercel.app',
+        url: 'https://fieldbook-be.onrender.com',
         description: 'Production server',
       },
     ],
@@ -49,17 +49,9 @@ const options = {
             sport_type_id: { type: 'integer', example: 1 },
             rating: { type: 'number', example: 4.9 },
             reviews_count: { type: 'integer', example: 150 },
-            main_image_url: {
+            images: {
               type: 'string',
               example: 'https://example.com/images/futsal_jaya.jpg',
-            },
-            images: {
-              type: 'array',
-              items: { type: 'string' },
-              example: [
-                'https://example.com/images/futsal_jaya_1.jpg',
-                'https://example.com/images/futsal_jaya_2.jpg',
-              ],
             },
             capacity: { type: 'integer', example: 10 },
             availability_summary: {
@@ -97,17 +89,9 @@ const options = {
             sport_type: { type: 'string', example: 'Futsal' },
             rating: { type: 'number', example: 4.9 },
             reviews_count: { type: 'integer', example: 150 },
-            main_image_url: {
+            images: {
               type: 'string',
               example: 'https://example.com/images/futsal_jaya.jpg',
-            },
-            images: {
-              type: 'array',
-              items: { type: 'string' },
-              example: [
-                'https://example.com/images/futsal_jaya_1.jpg',
-                'https://example.com/images/futsal_jaya_2.jpg',
-              ],
             },
             capacity: { type: 'integer', example: 10 },
             availability_summary: {
@@ -136,6 +120,8 @@ const options = {
         },
         FieldUpdate: {
           type: 'object',
+          description:
+            'All properties are optional. Only provided fields will be updated. Fields omitted from the request will remain unchanged.',
           properties: {
             name: { type: 'string', example: 'Futsal Indoor Semarang Jaya' },
             location_summary: {
@@ -149,17 +135,9 @@ const options = {
             sport_type: { type: 'string', example: 'Futsal' },
             rating: { type: 'number', example: 4.9 },
             reviews_count: { type: 'integer', example: 150 },
-            main_image_url: {
+            images: {
               type: 'string',
               example: 'https://example.com/images/futsal_jaya.jpg',
-            },
-            images: {
-              type: 'array',
-              items: { type: 'string' },
-              example: [
-                'https://example.com/images/futsal_jaya_1.jpg',
-                'https://example.com/images/futsal_jaya_2.jpg',
-              ],
             },
             capacity: { type: 'integer', example: 10 },
             availability_summary: {

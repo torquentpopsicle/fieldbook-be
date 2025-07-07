@@ -1,3 +1,5 @@
+-- This migration only migrates data from JSON and does not create tables, so no drop statements are needed.
+
 -- Migrate fields data from JSON to database
 -- This script will be executed by the Node.js migration script
 
