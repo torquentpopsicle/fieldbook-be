@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -18,17 +19,20 @@ const PORT = process.env.PORT || 8000;
 const allowedOrigins = [
   'http://localhost:5173', // Vite dev
   'http://localhost:3000', // React dev
+  'http://localhost:8000', // Swagger dev
   'https://fieldbook-fe.vercel.app', // Replace with your deployed frontend
 ];
-app.use(cors({
-  origin: (origin, callback) => {
-    // allow requests with no origin (like mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    return callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow requests with no origin (like mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+  })
+);
 
 app.use(helmet());
 app.use(express.json());
@@ -36,10 +40,14 @@ app.use(express.json());
 // --- API Routes ---
 
 // Swagger Documentation
-app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'Fieldbook API Documentation'
-}));
+app.use(
+  '/api/v1/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpecs, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Fieldbook API Documentation',
+  })
+);
 
 // Fields routes
 app.use('/api/v1/fields', fieldsRoutes);
@@ -64,12 +72,10 @@ app.get('/', (req, res) => {
 app.use((req, res) => {
   res.status(404).json({
     status: 'error',
-    message: 'Endpoint not found'
+    message: 'Endpoint not found',
   });
 });
 
-
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-}); 
+});

@@ -30,15 +30,15 @@ const dataService = require('../services/dataService');
  */
 router.get('/', (req, res) => {
   const featuredData = dataService.getFeaturedFieldsData();
-  
+
   if (!featuredData) {
     return res.status(500).json({
       message: 'Error loading featured fields data',
-      error: 'Internal Server Error'
+      error: 'Internal Server Error',
     });
   }
 
   res.json(featuredData);
 });
 
-module.exports = router; 
+module.exports = router;

@@ -9,7 +9,14 @@
       "https://example.com/images/garuda_futsal_3.jpg"
     ],
     "description": "Premium indoor futsal facility with professional-grade artificial turf, air conditioning, and modern amenities. Perfect for both recreational and competitive play.",
-    "facilities": ["Toilet", "Kantin", "Mushola", "Parking", "Changing Rooms", "Air Conditioning"],
+    "facilities": [
+      "Toilet",
+      "Kantin",
+      "Mushola",
+      "Parking",
+      "Changing Rooms",
+      "Air Conditioning"
+    ],
     "availability": [
       { "start_time": "09:00", "end_time": "10:00", "is_available": true },
       { "start_time": "10:00", "end_time": "11:00", "is_available": false },
@@ -65,4 +72,4 @@
     "sport_type": "Futsal",
     "capacity": 10
   }
-} 
+}

@@ -59,7 +59,7 @@ class DataService {
   findUserByEmail(email) {
     const usersData = this.getUsersData();
     if (!usersData || !usersData.users) return null;
-    
+
     return usersData.users.find(user => user.email === email) || null;
   }
 
@@ -82,23 +82,24 @@ class DataService {
     const newUser = {
       id: this.generateUserId(),
       ...userData,
-      role: 'customer'
+      role: 'customer',
     };
 
     usersData.users.push(newUser);
-    
+
     // Update the cache
     this.cache['users.json'] = usersData;
-    
+
     return newUser;
   }
 
   // Generate booking ID
   generateBookingId() {
     const date = new Date();
-    const dateStr = date.getFullYear().toString() + 
-                   (date.getMonth() + 1).toString().padStart(2, '0') + 
-                   date.getDate().toString().padStart(2, '0');
+    const dateStr =
+      date.getFullYear().toString() +
+      (date.getMonth() + 1).toString().padStart(2, '0') +
+      date.getDate().toString().padStart(2, '0');
     const randomStr = Math.random().toString(36).substr(2, 6).toUpperCase();
     return `BK-${dateStr}-${randomStr}`;
   }
@@ -113,10 +114,10 @@ class DataService {
         booking_id: this.generateBookingId(),
         status: 'pending_payment',
         total_price: totalPrice,
-        payment_due: paymentDue.toISOString()
-      }
+        payment_due: paymentDue.toISOString(),
+      },
     };
   }
 }
 
-module.exports = new DataService(); 
+module.exports = new DataService();

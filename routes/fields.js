@@ -45,11 +45,11 @@ const dataService = require('../services/dataService');
  */
 router.get('/', (req, res) => {
   const fieldsData = dataService.getFieldsData();
-  
+
   if (!fieldsData) {
     return res.status(500).json({
       message: 'Error loading fields data',
-      error: 'Internal Server Error'
+      error: 'Internal Server Error',
     });
   }
 
@@ -91,16 +91,16 @@ router.get('/', (req, res) => {
 router.get('/:field_id', (req, res) => {
   const { field_id } = req.params;
   const fieldDetails = dataService.getFieldDetails(field_id);
-  
+
   if (!fieldDetails) {
     return res.status(404).json({
       message: 'Field not found',
-      error: 'Not Found'
+      error: 'Not Found',
     });
   }
 
   res.json({
-    data: fieldDetails
+    data: fieldDetails,
   });
 });
 
@@ -162,15 +162,15 @@ router.get('/:field_id', (req, res) => {
  */
 router.get('/filters', (req, res) => {
   const filtersData = dataService.getFiltersData();
-  
+
   if (!filtersData) {
     return res.status(500).json({
       message: 'Error loading filters data',
-      error: 'Internal Server Error'
+      error: 'Internal Server Error',
     });
   }
 
   res.json(filtersData);
 });
 
-module.exports = router; 
+module.exports = router;
