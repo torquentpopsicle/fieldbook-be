@@ -58,7 +58,7 @@ router.get('/', optionalAuth, async (req, res) => {
 
     const options = {
       page: parseInt(page) || 1,
-      limit: parseInt(limit) || 10,
+      limit: parseInt(limit) || 6,
       sportType: sport_type,
       location,
       minPrice: min_price ? parseFloat(min_price) : null,
