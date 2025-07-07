@@ -12,6 +12,7 @@ const locationsRoutes = require('./routes/locations');
 const bookingsRoutes = require('./routes/bookings');
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -107,6 +108,9 @@ app.use('/api/v1/auth', authRoutes);
 
 // Profile routes (protected)
 app.use('/api/v1/profile', profileRoutes);
+
+// Admin routes (protected - admin only)
+app.use('/api/v1/admin', adminRoutes);
 
 // Health check
 app.get('/', (req, res) => {

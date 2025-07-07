@@ -118,6 +118,167 @@ class DataService {
       },
     };
   }
+
+  // Save data to JSON file
+  saveDataFile(filename, data) {
+    try {
+      const filePath = path.join(this.dataPath, filename);
+      fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+      this.cache[filename] = data; // Update cache
+      return true;
+    } catch (error) {
+      console.error(`Error saving data file ${filename}:`, error.message);
+      return false;
+    }
+  }
+
+  // Create a new field
+  createField(fieldData) {
+    const fieldsData = this.getFieldsData();
+    if (!fieldsData || !fieldsData.data) return null;
+
+    const newField = {
+      id: Math.max(...fieldsData.data.map(f => f.id)) + 1,
+      ...fieldData,
+      reviews_count: 0,
+      rating: 0,
+    };
+
+    fieldsData.data.push(newField);
+
+    if (this.saveDataFile('fields.json', fieldsData)) {
+      return newField;
+    }
+    return null;
+  }
+
+  // Update an existing field
+  updateField(fieldId, updateData) {
+    const fieldsData = this.getFieldsData();
+    if (!fieldsData || !fieldsData.data) return null;
+
+    const fieldIndex = fieldsData.data.findIndex(f => f.id == fieldId);
+    if (fieldIndex === -1) return null;
+
+    fieldsData.data[fieldIndex] = {
+      ...fieldsData.data[fieldIndex],
+      ...updateData,
+    };
+
+    if (this.saveDataFile('fields.json', fieldsData)) {
+      return fieldsData.data[fieldIndex];
+    }
+    return null;
+  }
+
+  // Delete a field
+  deleteField(fieldId) {
+    const fieldsData = this.getFieldsData();
+    if (!fieldsData || !fieldsData.data) return false;
+
+    const fieldIndex = fieldsData.data.findIndex(f => f.id == fieldId);
+    if (fieldIndex === -1) return false;
+
+    fieldsData.data.splice(fieldIndex, 1);
+
+    return this.saveDataFile('fields.json', fieldsData);
+  }
+
+  // Create a new field detail entry
+  createFieldDetail(fieldId, detailData) {
+    const fieldDetails = this.loadDataFile('field-details.json') || {};
+
+    fieldDetails[fieldId] = {
+      id: parseInt(fieldId),
+      ...detailData,
+    };
+
+    return this.saveDataFile('field-details.json', fieldDetails);
+  }
+
+  // Update field details
+  updateFieldDetail(fieldId, updateData) {
+    const fieldDetails = this.loadDataFile('field-details.json');
+    if (!fieldDetails || !fieldDetails[fieldId]) return null;
+
+    fieldDetails[fieldId] = { ...fieldDetails[fieldId], ...updateData };
+
+    if (this.saveDataFile('field-details.json', fieldDetails)) {
+      return fieldDetails[fieldId];
+    }
+    return null;
+  }
+
+  // Get or create bookings data file
+  getBookingsData() {
+    let bookingsData = this.loadDataFile('bookings.json');
+    if (!bookingsData) {
+      bookingsData = { bookings: [] };
+      this.saveDataFile('bookings.json', bookingsData);
+    }
+    return bookingsData;
+  }
+
+  // Create a new booking
+  createBooking(bookingData) {
+    const bookingsData = this.getBookingsData();
+
+    const newBooking = {
+      id: this.generateBookingId(),
+      ...bookingData,
+      status: 'pending_payment',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    bookingsData.bookings.push(newBooking);
+
+    if (this.saveDataFile('bookings.json', bookingsData)) {
+      return newBooking;
+    }
+    return null;
+  }
+
+  // Get all bookings
+  getAllBookings() {
+    const bookingsData = this.getBookingsData();
+    return bookingsData.bookings || [];
+  }
+
+  // Get booking by ID
+  getBookingById(bookingId) {
+    const bookings = this.getAllBookings();
+    return bookings.find(b => b.id === bookingId) || null;
+  }
+
+  // Update a booking
+  updateBooking(bookingId, updateData) {
+    const bookingsData = this.getBookingsData();
+    const bookingIndex = bookingsData.bookings.findIndex(
+      b => b.id === bookingId
+    );
+
+    if (bookingIndex === -1) return null;
+
+    bookingsData.bookings[bookingIndex] = {
+      ...bookingsData.bookings[bookingIndex],
+      ...updateData,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (this.saveDataFile('bookings.json', bookingsData)) {
+      return bookingsData.bookings[bookingIndex];
+    }
+    return null;
+  }
+
+  // Cancel a booking
+  cancelBooking(bookingId) {
+    return this.updateBooking(bookingId, {
+      status: 'cancelled',
+      cancelled_at: new Date().toISOString(),
+    });
+  }
 }
 
 module.exports = new DataService();
