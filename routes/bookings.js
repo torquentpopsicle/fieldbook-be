@@ -2,7 +2,39 @@ const express = require('express');
 const router = express.Router();
 const dataService = require('../services/dataService');
 
-// Booking (dummy, no real auth)
+/**
+ * @swagger
+ * /api/v1/bookings:
+ *   post:
+ *     summary: Create a new booking
+ *     description: Create a new booking for a sports field
+ *     tags: [Bookings]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Booking'
+ *     responses:
+ *       201:
+ *         description: Booking created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BookingResponse'
+ *       400:
+ *         description: Bad request - missing required fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Field not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 router.post('/', (req, res) => {
   const { field_id, start_time, end_time, date } = req.body;
   

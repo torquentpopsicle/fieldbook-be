@@ -21,6 +21,8 @@ fieldbook-be/
 │   └── auth.js             # Authentication endpoints
 ├── services/               # Business logic
 │   └── dataService.js      # Data loading and management
+├── config/                 # Configuration files
+│   └── swagger.js          # Swagger/OpenAPI configuration
 ├── index.js                # Main application file
 └── package.json
 ```
@@ -33,24 +35,29 @@ fieldbook-be/
 - **Error Handling**: Proper error responses for all endpoints
 - **CORS Support**: Configured for frontend development
 - **Security**: Helmet middleware for security headers
+- **API Documentation**: Interactive Swagger/OpenAPI documentation
 
-## API Endpoints
+## API Documentation
 
-### Fields
+Interactive API documentation is available at `/api/v1/docs` when the server is running.
+
+### API Endpoints
+
+#### Fields
 - `GET /api/v1/fields` - Get all fields with pagination
 - `GET /api/v1/fields/:field_id` - Get field details
 - `GET /api/v1/fields/filters` - Get filter options
 
-### Featured Fields
+#### Featured Fields
 - `GET /api/v1/featured-fields` - Get featured fields
 
-### Locations
+#### Locations
 - `GET /api/v1/locations/autocomplete` - Location autocomplete
 
-### Bookings
+#### Bookings
 - `POST /api/v1/bookings` - Create a new booking
 
-### Authentication
+#### Authentication
 - `POST /api/v1/auth/login` - User login
 - `POST /api/v1/auth/register` - User registration
 

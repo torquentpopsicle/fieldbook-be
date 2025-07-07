@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./config/swagger');
 
 // Import route handlers
 const fieldsRoutes = require('./routes/fields');
@@ -32,6 +34,12 @@ app.use(helmet());
 app.use(express.json());
 
 // --- API Routes ---
+
+// Swagger Documentation
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Fieldbook API Documentation'
+}));
 
 // Fields routes
 app.use('/api/v1/fields', fieldsRoutes);
