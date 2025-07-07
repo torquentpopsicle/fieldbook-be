@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    const token = jwtService.generateToken(user);
+    const tokenPair = jwtService.generateTokenPair(user);
 
     console.log('✅ LOGIN SUCCESS:', {
       email,
@@ -77,9 +77,11 @@ router.post('/login', async (req, res) => {
           email: user.email,
           role: user.role,
         },
-        access_token: token,
+        access_token: tokenPair.accessToken,
+        refresh_token: tokenPair.refreshToken,
         token_type: 'Bearer',
         expires_in: process.env.JWT_EXPIRES_IN || '24h',
+        refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
       },
     });
   } catch (error) {
@@ -164,8 +166,8 @@ router.post('/register', async (req, res) => {
     // Create new user
     const newUser = await userService.createUser({ name, email, password });
 
-    // Generate token for new user
-    const token = jwtService.generateToken(newUser);
+    // Generate token pair for new user
+    const tokenPair = jwtService.generateTokenPair(newUser);
 
     console.log('✅ REGISTER SUCCESS:', {
       email,
@@ -183,9 +185,11 @@ router.post('/register', async (req, res) => {
           email: newUser.email,
           role: newUser.role,
         },
-        access_token: token,
+        access_token: tokenPair.accessToken,
+        refresh_token: tokenPair.refreshToken,
         token_type: 'Bearer',
         expires_in: process.env.JWT_EXPIRES_IN || '24h',
+        refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
       },
     });
   } catch (error) {
@@ -196,6 +200,143 @@ router.post('/register', async (req, res) => {
     });
     res.status(500).json({
       message: 'Error creating user',
+      error: 'Internal Server Error',
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /api/v1/auth/refresh:
+ *   post:
+ *     summary: Refresh access token
+ *     description: Generate new access token using refresh token
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refresh_token
+ *             properties:
+ *               refresh_token:
+ *                 type: string
+ *                 description: Refresh token received during login
+ *                 example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *     responses:
+ *       200:
+ *         description: Token refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Token refreshed successfully"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     access_token:
+ *                       type: string
+ *                       description: New access token
+ *                     refresh_token:
+ *                       type: string
+ *                       description: New refresh token
+ *                     token_type:
+ *                       type: string
+ *                       example: "Bearer"
+ *                     expires_in:
+ *                       type: string
+ *                       example: "24h"
+ *                     refresh_expires_in:
+ *                       type: string
+ *                       example: "7d"
+ *       400:
+ *         description: Bad request - missing refresh token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized - invalid or expired refresh token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.post('/refresh', async (req, res) => {
+  try {
+    const { refresh_token } = req.body;
+
+    if (!refresh_token) {
+      console.log('❌ REFRESH FAILED: Missing refresh token');
+      return res.status(400).json({
+        message: 'Refresh token is required',
+        error: 'Bad Request',
+      });
+    }
+
+    // Verify refresh token
+    const decoded = jwtService.verifyRefreshToken(refresh_token);
+
+    // Get user from database
+    const user = await userService.findUserById(decoded.userId);
+
+    if (!user) {
+      console.log(
+        '❌ REFRESH FAILED: User not found for userId:',
+        decoded.userId
+      );
+      return res.status(401).json({
+        message: 'Invalid refresh token',
+        error: 'Unauthorized',
+      });
+    }
+
+    // Generate new token pair
+    const tokenPair = jwtService.generateTokenPair(user);
+
+    console.log('✅ REFRESH SUCCESS:', {
+      email: user.email,
+      userId: user.id,
+      userName: user.name,
+      timestamp: new Date().toISOString(),
+    });
+
+    res.json({
+      message: 'Token refreshed successfully',
+      data: {
+        access_token: tokenPair.accessToken,
+        refresh_token: tokenPair.refreshToken,
+        token_type: 'Bearer',
+        expires_in: process.env.JWT_EXPIRES_IN || '24h',
+        refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+      },
+    });
+  } catch (error) {
+    console.error('❌ REFRESH ERROR:', {
+      error: error.message,
+      timestamp: new Date().toISOString(),
+    });
+
+    if (error.message === 'Invalid refresh token') {
+      return res.status(401).json({
+        message: 'Invalid or expired refresh token',
+        error: 'Unauthorized',
+      });
+    }
+
+    res.status(500).json({
+      message: 'Internal server error',
       error: 'Internal Server Error',
     });
   }
