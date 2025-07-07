@@ -11,14 +11,14 @@ const featuredRoutes = require('./routes/featured');
 const locationsRoutes = require('./routes/locations');
 const bookingsRoutes = require('./routes/bookings');
 const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/profile');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 // CORS config: allow frontend and dev URLs
 const allowedOrigins = [
-  'http://localhost:5173', // Vite dev
-  'http://localhost:3000', // React dev
+  'http://localhost:8080', // Frontend dev
   'http://localhost:8000', // Swagger dev
   'https://fieldbook-fe.vercel.app', // Replace with your deployed frontend
 ];
@@ -63,6 +63,9 @@ app.use('/api/v1/bookings', bookingsRoutes);
 
 // Auth routes
 app.use('/api/v1/auth', authRoutes);
+
+// Profile routes (protected)
+app.use('/api/v1/profile', profileRoutes);
 
 // Health check
 app.get('/', (req, res) => {

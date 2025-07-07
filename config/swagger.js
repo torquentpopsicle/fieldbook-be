@@ -23,6 +23,13 @@ const options = {
       },
     ],
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
       schemas: {
         Field: {
           type: 'object',
@@ -160,7 +167,12 @@ const options = {
               type: 'object',
               properties: {
                 user: { $ref: '#/components/schemas/User' },
-                access_token: { type: 'string', example: 'dummy.jwt.token' },
+                access_token: {
+                  type: 'string',
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                },
+                token_type: { type: 'string', example: 'Bearer' },
+                expires_in: { type: 'string', example: '24h' },
               },
             },
           },

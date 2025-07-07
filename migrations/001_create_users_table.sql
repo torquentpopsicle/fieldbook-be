@@ -15,5 +15,5 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 -- Insert initial users from the JSON data
 INSERT INTO users (id, name, email, password, role) VALUES
   ('ac81918e-4b7a-4566-b55f-05ae4984ad9c', 'John Doe', 'customer@example.com', 'customer123', 'customer'),
-  ('d3870434-3ffc-4e99-bbd0-779f208050c0', 'Jane Smith', 'jane.smith@example.com', 'jane123', 'customer')
+  ('ad618c35-ba8d-4111-9f99-d5e3780ce8b0', 'Jane Smith', 'admin@fieldbook.com', 'admin123', 'admin')
 ON CONFLICT (email) DO NOTHING; 
