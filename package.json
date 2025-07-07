@@ -7,9 +7,13 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "init-db": "node scripts/init-db.js",
+    "migrate": "node scripts/migrate-schema.js",
+    "migrate-data": "node scripts/migrate-to-database.js",
+    "migrate-all": "npm run migrate && npm run migrate-data",
     "test-auth": "node scripts/test-auth.js",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "axios": "^1.10.0",

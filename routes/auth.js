@@ -59,12 +59,19 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    const tokenPair = jwtService.generateTokenPair(user);
+    const userPayload = {
+      id: user.id,
+      email: user.email,
+      role: user.role || 'customer',
+      name: user.name,
+    };
+    const tokenPair = jwtService.generateTokenPair(userPayload);
 
     console.log('✅ LOGIN SUCCESS:', {
       email,
       userId: user.id,
       userName: user.name,
+      userRole: user.role,
       timestamp: new Date().toISOString(),
     });
 

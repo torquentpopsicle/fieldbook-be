@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpecs = require('./config/swagger');
+const logger = require('./utils/logger');
 
 // Import route handlers
 const fieldsRoutes = require('./routes/fields');
@@ -23,7 +24,6 @@ const allowedOrigins = [
   'http://localhost:8000', // Swagger dev
   'http://localhost:5173', // Vite dev
   'https://fieldbook-fe.vercel.app', // Deployed frontend
-  'https://fieldbook-fe.vercel.app/', // Deployed frontend with trailing slash
 ];
 
 // Enhanced CORS configuration
@@ -32,19 +32,19 @@ app.use(
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps, curl, etc.)
       if (!origin) {
-        console.log('CORS: Allowing request with no origin');
+        // console.log('CORS: Allowing request with no origin');
         return callback(null, true);
       }
 
       // Check if origin is in allowed list
       if (allowedOrigins.includes(origin)) {
-        console.log('CORS: Allowing origin:', origin);
+        // console.log('CORS: Allowing origin:', origin);
         return callback(null, true);
       }
 
       // Log blocked origins for debugging
-      console.log('CORS: Blocking origin:', origin);
-      console.log('CORS: Allowed origins:', allowedOrigins);
+      // console.log('CORS: Blocking origin:', origin);
+      // console.log('CORS: Allowed origins:', allowedOrigins);
 
       return callback(new Error('Not allowed by CORS'));
     },
@@ -66,6 +66,9 @@ app.use(
 
 app.use(helmet());
 app.use(express.json());
+
+// Request logging middleware
+app.use(logger.logRequest);
 
 // Handle preflight requests
 app.options('*', cors());
@@ -134,14 +137,19 @@ app.get('/api/v1/cors-debug', (req, res) => {
     },
   });
 });
+// Import error handling middleware
+const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
+
 // 404 - Not Found handler
-app.use((req, res) => {
-  res.status(404).json({
-    status: 'error',
-    message: 'Endpoint not found',
-  });
-});
+app.use(notFoundHandler);
+
+// Global error handler (must be last)
+app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  logger.success(`Server started successfully`, {
+    port: PORT,
+    environment: process.env.NODE_ENV || 'development',
+    timestamp: new Date().toISOString(),
+  });
 });

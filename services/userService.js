@@ -183,12 +183,28 @@ class UserService {
    */
   async deleteUser(id) {
     try {
-      const query = 'DELETE FROM users WHERE id = $1 RETURNING id';
-      const result = await pool.query(query, [id]);
-      return result.rowCount > 0;
+      const result = await pool.query(
+        `
+        UPDATE users 
+        SET is_active = false, updated_at = CURRENT_TIMESTAMP
+        WHERE id = $1 AND is_active = true
+        RETURNING id
+      `,
+        [id]
+      );
+
+      const deleted = result.rows.length > 0;
+
+      if (deleted) {
+        console.log('✅ USER DELETED:', { id });
+      } else {
+        console.log('⚠️ USER NOT FOUND OR ALREADY DELETED:', { id });
+      }
+
+      return deleted;
     } catch (error) {
-      console.error('Error deleting user:', error);
-      throw error;
+      console.error('❌ USER DELETE ERROR:', error);
+      throw new Error('Failed to delete user');
     }
   }
 
@@ -200,18 +216,32 @@ class UserService {
    */
   async updateUserRole(id, role) {
     try {
-      const query = `
+      const result = await pool.query(
+        `
         UPDATE users 
-        SET role = $2, updated_at = NOW() 
-        WHERE id = $1 
+        SET role = $1, updated_at = CURRENT_TIMESTAMP
+        WHERE id = $2 AND is_active = true
         RETURNING id, name, email, role, created_at, updated_at
-      `;
+      `,
+        [role, id]
+      );
 
-      const result = await pool.query(query, [id, role]);
-      return result.rows[0];
+      const updated = result.rows.length > 0;
+
+      if (updated) {
+        console.log('✅ USER ROLE UPDATED:', {
+          id,
+          role,
+          userEmail: result.rows[0].email,
+        });
+      } else {
+        console.log('⚠️ USER NOT FOUND OR INACTIVE:', { id });
+      }
+
+      return updated ? result.rows[0] : null;
     } catch (error) {
-      console.error('Error updating user role:', error);
-      throw error;
+      console.error('❌ USER ROLE UPDATE ERROR:', error);
+      throw new Error('Failed to update user role');
     }
   }
 

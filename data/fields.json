@@ -1,6 +1,28 @@
 {
   "data": [
     {
+      "id": 101,
+      "name": "Garuda Futsal Center",
+      "location_summary": "Pahlawan, Semarang",
+      "sport_type": "Futsal",
+      "rating": 4.9,
+      "main_image_url": "https://example.com/images/garuda_futsal_1.jpg",
+      "capacity": 10,
+      "availability_summary": "Available today",
+      "price_per_hour": 95000,
+      "currency": "Rp",
+      "reviews_count": 150,
+      "key_facilities": [
+        "Indoor",
+        "Parking",
+        "Changing Rooms",
+        "Toilet",
+        "Kantin",
+        "Mushola",
+        "Air Conditioning"
+      ]
+    },
+    {
       "id": 402,
       "name": "Futsal Indoor Semarang Jaya",
       "location_summary": "Tembalang, Semarang",

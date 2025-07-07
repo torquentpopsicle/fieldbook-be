@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const dataService = require('../services/dataService');
+const fieldService = require('../services/fieldService');
+const bookingService = require('../services/bookingService');
 const userService = require('../services/userService');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
@@ -41,26 +42,41 @@ router.use(authorizeRoles('admin'));
  *       500:
  *         description: Internal server error
  */
-router.get('/fields', (req, res) => {
+router.get('/fields', async (req, res) => {
   try {
-    const fieldsData = dataService.getFieldsData();
+    const {
+      page,
+      limit,
+      sport_type,
+      location,
+      min_price,
+      max_price,
+      facility,
+    } = req.query;
 
-    if (!fieldsData) {
-      return res.status(500).json({
-        message: 'Error loading fields data',
-        error: 'Internal Server Error',
-      });
-    }
+    const options = {
+      page: parseInt(page) || 1,
+      limit: parseInt(limit) || 50,
+      sportType: sport_type,
+      location,
+      minPrice: min_price ? parseFloat(min_price) : null,
+      maxPrice: max_price ? parseFloat(max_price) : null,
+      facility,
+    };
+
+    const result = await fieldService.getAllFields(options);
 
     console.log('✅ ADMIN FIELDS LIST:', {
       adminEmail: req.user.email,
-      fieldsCount: fieldsData.data.length,
+      fieldsCount: result.data.length,
+      totalFields: result.pagination.total_results,
       timestamp: new Date().toISOString(),
     });
 
     res.json({
       message: 'Fields retrieved successfully',
-      data: fieldsData.data,
+      data: result.data,
+      pagination: result.pagination,
     });
   } catch (error) {
     console.error('❌ ADMIN FIELDS LIST ERROR:', error);
@@ -89,11 +105,9 @@ router.get('/fields', (req, res) => {
  *             required:
  *               - name
  *               - location_summary
+ *               - address
  *               - sport_type
- *               - capacity
  *               - price_per_hour
- *               - currency
- *               - key_facilities
  *             properties:
  *               name:
  *                 type: string
@@ -101,6 +115,9 @@ router.get('/fields', (req, res) => {
  *               location_summary:
  *                 type: string
  *                 example: "Downtown, Jakarta"
+ *               address:
+ *                 type: string
+ *                 example: "Jl. Sudirman No. 123, Jakarta"
  *               sport_type:
  *                 type: string
  *                 example: "Futsal"
@@ -113,14 +130,22 @@ router.get('/fields', (req, res) => {
  *               currency:
  *                 type: string
  *                 example: "Rp"
- *               key_facilities:
+ *               description:
+ *                 type: string
+ *                 example: "Premium indoor futsal facility"
+ *               main_image_url:
+ *                 type: string
+ *                 example: "https://example.com/images/field.jpg"
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["https://example.com/images/field1.jpg", "https://example.com/images/field2.jpg"]
+ *               facilities:
  *                 type: array
  *                 items:
  *                   type: string
  *                 example: ["Indoor", "Parking", "Changing Rooms"]
- *               main_image_url:
- *                 type: string
- *                 example: "https://example.com/images/field.jpg"
  *               availability_summary:
  *                 type: string
  *                 example: "Available today"
@@ -144,7 +169,7 @@ router.get('/fields', (req, res) => {
  *       500:
  *         description: Internal server error
  */
-router.post('/fields', (req, res) => {
+router.post('/fields', async (req, res) => {
   try {
     const {
       name,
@@ -154,26 +179,40 @@ router.post('/fields', (req, res) => {
       price_per_hour,
       currency,
       key_facilities,
+      address,
+      description,
+      images,
     } = req.body;
 
     // Validate required fields
     if (
       !name ||
       !location_summary ||
+      !address ||
       !sport_type ||
-      !capacity ||
-      !price_per_hour ||
-      !currency ||
-      !key_facilities
+      !price_per_hour
     ) {
       return res.status(400).json({
         message:
-          'Missing required fields: name, location_summary, sport_type, capacity, price_per_hour, currency, key_facilities',
+          'Missing required fields: name, location_summary, address, sport_type, price_per_hour',
         error: 'Bad Request',
       });
     }
 
-    const newField = dataService.createField(req.body);
+    const fieldData = {
+      name,
+      location_summary,
+      address,
+      sport_type,
+      capacity: capacity ? parseInt(capacity) : 10,
+      price_per_hour: parseFloat(price_per_hour),
+      currency: currency || 'Rp',
+      facilities: key_facilities || [],
+      description,
+      images: images || [],
+    };
+
+    const newField = await fieldService.createField(fieldData);
 
     if (!newField) {
       return res.status(500).json({
@@ -275,10 +314,10 @@ router.post('/fields', (req, res) => {
  *       500:
  *         description: Internal server error
  */
-router.put('/fields/:field_id', (req, res) => {
+router.put('/fields/:field_id', async (req, res) => {
   try {
     const { field_id } = req.params;
-    const updatedField = dataService.updateField(field_id, req.body);
+    const updatedField = await fieldService.updateField(field_id, req.body);
 
     if (!updatedField) {
       return res.status(404).json({
@@ -342,10 +381,10 @@ router.put('/fields/:field_id', (req, res) => {
  *       500:
  *         description: Internal server error
  */
-router.delete('/fields/:field_id', (req, res) => {
+router.delete('/fields/:field_id', async (req, res) => {
   try {
     const { field_id } = req.params;
-    const deleted = dataService.deleteField(field_id);
+    const deleted = await fieldService.deleteField(field_id);
 
     if (!deleted) {
       return res.status(404).json({
@@ -441,26 +480,33 @@ router.delete('/fields/:field_id', (req, res) => {
  *       500:
  *         description: Internal server error
  */
-router.get('/bookings', (req, res) => {
+router.get('/bookings', async (req, res) => {
   try {
-    const { status } = req.query;
-    let bookings = dataService.getAllBookings();
+    const { status, page, limit, user_id, field_id, date } = req.query;
 
-    // Filter by status if provided
-    if (status) {
-      bookings = bookings.filter(booking => booking.status === status);
-    }
+    const options = {
+      status,
+      userId: user_id,
+      fieldId: field_id,
+      date,
+      page: parseInt(page) || 1,
+      limit: parseInt(limit) || 50,
+    };
+
+    const result = await bookingService.getAllBookings(options);
 
     console.log('✅ ADMIN BOOKINGS LIST:', {
       adminEmail: req.user.email,
-      bookingsCount: bookings.length,
+      bookingsCount: result.data.length,
+      totalBookings: result.pagination.total_results,
       statusFilter: status || 'all',
       timestamp: new Date().toISOString(),
     });
 
     res.json({
       message: 'Bookings retrieved successfully',
-      data: bookings,
+      data: result.data,
+      pagination: result.pagination,
     });
   } catch (error) {
     console.error('❌ ADMIN BOOKINGS LIST ERROR:', error);
@@ -531,10 +577,13 @@ router.get('/bookings', (req, res) => {
  *       500:
  *         description: Internal server error
  */
-router.put('/bookings/:booking_id', (req, res) => {
+router.put('/bookings/:booking_id', async (req, res) => {
   try {
     const { booking_id } = req.params;
-    const updatedBooking = dataService.updateBooking(booking_id, req.body);
+    const updatedBooking = await bookingService.updateBooking(
+      booking_id,
+      req.body
+    );
 
     if (!updatedBooking) {
       return res.status(404).json({
@@ -609,25 +658,21 @@ router.put('/bookings/:booking_id', (req, res) => {
  *       500:
  *         description: Internal server error
  */
-router.put('/bookings/:booking_id/cancel', (req, res) => {
+router.put('/bookings/:booking_id/cancel', async (req, res) => {
   try {
     const { booking_id } = req.params;
     const { reason } = req.body;
 
-    const cancelledBooking = dataService.cancelBooking(booking_id);
+    const cancelledBooking = await bookingService.cancelBooking(
+      booking_id,
+      req.user.userId,
+      reason
+    );
 
     if (!cancelledBooking) {
       return res.status(404).json({
         message: 'Booking not found',
         error: 'Not Found',
-      });
-    }
-
-    // Add cancellation reason if provided
-    if (reason) {
-      const updatedBooking = dataService.updateBooking(booking_id, {
-        cancellation_reason: reason,
-        cancelled_by: req.user.email,
       });
     }
 

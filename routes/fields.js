@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const dataService = require('../services/dataService');
+const fieldService = require('../services/fieldService');
+const { optionalAuth } = require('../middleware/auth');
 
 /**
  * @swagger
@@ -43,17 +44,38 @@ const dataService = require('../services/dataService');
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/', (req, res) => {
-  const fieldsData = dataService.getFieldsData();
+router.get('/', optionalAuth, async (req, res) => {
+  try {
+    const {
+      page,
+      limit,
+      sport_type,
+      location,
+      min_price,
+      max_price,
+      facility,
+    } = req.query;
 
-  if (!fieldsData) {
-    return res.status(500).json({
-      message: 'Error loading fields data',
+    const options = {
+      page: parseInt(page) || 1,
+      limit: parseInt(limit) || 10,
+      sportType: sport_type,
+      location,
+      minPrice: min_price ? parseFloat(min_price) : null,
+      maxPrice: max_price ? parseFloat(max_price) : null,
+      facility,
+    };
+
+    const result = await fieldService.getAllFields(options);
+
+    res.json(result);
+  } catch (error) {
+    console.error('❌ FIELDS ROUTE ERROR:', error);
+    res.status(500).json({
+      message: 'Error retrieving fields',
       error: 'Internal Server Error',
     });
   }
-
-  res.json(fieldsData);
 });
 
 /**
@@ -80,7 +102,7 @@ router.get('/', (req, res) => {
  *               type: object
  *               properties:
  *                 data:
- *                   $ref: '#/components/schemas/FieldDetail'
+ *                   $ref: '#/components/schemas/Field'
  *       404:
  *         description: Field not found
  *         content:
@@ -88,20 +110,28 @@ router.get('/', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:field_id', (req, res) => {
-  const { field_id } = req.params;
-  const fieldDetails = dataService.getFieldDetails(field_id);
+router.get('/:field_id', optionalAuth, async (req, res) => {
+  try {
+    const { field_id } = req.params;
+    const fieldDetails = await fieldService.getFieldById(field_id);
 
-  if (!fieldDetails) {
-    return res.status(404).json({
-      message: 'Field not found',
-      error: 'Not Found',
+    if (!fieldDetails) {
+      return res.status(404).json({
+        message: 'Field not found',
+        error: 'Not Found',
+      });
+    }
+
+    res.json({
+      data: fieldDetails,
+    });
+  } catch (error) {
+    console.error('❌ FIELD DETAILS ROUTE ERROR:', error);
+    res.status(500).json({
+      message: 'Error retrieving field details',
+      error: 'Internal Server Error',
     });
   }
-
-  res.json({
-    data: fieldDetails,
-  });
 });
 
 /**
@@ -160,17 +190,17 @@ router.get('/:field_id', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/filters', (req, res) => {
-  const filtersData = dataService.getFiltersData();
-
-  if (!filtersData) {
-    return res.status(500).json({
+router.get('/filters', async (req, res) => {
+  try {
+    const filtersData = await fieldService.getFilterOptions();
+    res.json({ data: filtersData });
+  } catch (error) {
+    console.error('❌ FILTERS ROUTE ERROR:', error);
+    res.status(500).json({
       message: 'Error loading filters data',
       error: 'Internal Server Error',
     });
   }
-
-  res.json(filtersData);
 });
 
 module.exports = router;
