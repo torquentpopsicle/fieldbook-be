@@ -1,0 +1,19 @@
+{
+  "data": [
+    { "name": "Semarang", "id": "kota-smg" },
+    { "name": "Semarang Barat", "id": "kec-smg-brt" },
+    { "name": "Semarang Selatan", "id": "kec-smg-slt" },
+    { "name": "Semarang Utara", "id": "kec-smg-utr" },
+    { "name": "Semarang Tengah", "id": "kec-smg-tgh" },
+    { "name": "Semarang Timur", "id": "kec-smg-tmr" },
+    { "name": "Tembalang", "id": "kec-tmb" },
+    { "name": "Pedurungan", "id": "kec-pdr" },
+    { "name": "Gajahmungkur", "id": "kec-gjm" },
+    { "name": "Candisari", "id": "kec-cds" },
+    { "name": "Gunungpati", "id": "kec-gnp" },
+    { "name": "Mijen", "id": "kec-mjn" },
+    { "name": "Ngaliyan", "id": "kec-ngl" },
+    { "name": "Banyumanik", "id": "kec-bym" },
+    { "name": "Tugu", "id": "kec-tgu" }
+  ]
+} 

@@ -1,0 +1,68 @@
+{
+  "101": {
+    "id": 101,
+    "name": "Garuda Futsal Center",
+    "address": "Jl. Pahlawan No. 10, Semarang",
+    "images": [
+      "https://example.com/images/garuda_futsal_1.jpg",
+      "https://example.com/images/garuda_futsal_2.jpg",
+      "https://example.com/images/garuda_futsal_3.jpg"
+    ],
+    "description": "Premium indoor futsal facility with professional-grade artificial turf, air conditioning, and modern amenities. Perfect for both recreational and competitive play.",
+    "facilities": ["Toilet", "Kantin", "Mushola", "Parking", "Changing Rooms", "Air Conditioning"],
+    "availability": [
+      { "start_time": "09:00", "end_time": "10:00", "is_available": true },
+      { "start_time": "10:00", "end_time": "11:00", "is_available": false },
+      { "start_time": "11:00", "end_time": "12:00", "is_available": true },
+      { "start_time": "12:00", "end_time": "13:00", "is_available": true },
+      { "start_time": "13:00", "end_time": "14:00", "is_available": false },
+      { "start_time": "14:00", "end_time": "15:00", "is_available": true },
+      { "start_time": "15:00", "end_time": "16:00", "is_available": true },
+      { "start_time": "16:00", "end_time": "17:00", "is_available": false },
+      { "start_time": "17:00", "end_time": "18:00", "is_available": true },
+      { "start_time": "18:00", "end_time": "19:00", "is_available": true },
+      { "start_time": "19:00", "end_time": "20:00", "is_available": true },
+      { "start_time": "20:00", "end_time": "21:00", "is_available": true },
+      { "start_time": "21:00", "end_time": "22:00", "is_available": true }
+    ],
+    "price_per_hour": 95,
+    "currency": "USD",
+    "rating": 4.9,
+    "reviews_count": 150,
+    "sport_type": "Futsal",
+    "capacity": 10
+  },
+  "402": {
+    "id": 402,
+    "name": "Futsal Indoor Semarang Jaya",
+    "address": "Jl. Tembalang Raya No. 45, Tembalang, Semarang",
+    "images": [
+      "https://example.com/images/futsal_jaya_1.jpg",
+      "https://example.com/images/futsal_jaya_2.jpg"
+    ],
+    "description": "Modern indoor futsal facility with high-quality artificial turf and excellent lighting. Located in the heart of Tembalang area.",
+    "facilities": ["Indoor", "Parking", "Changing Rooms", "Toilet", "Kantin"],
+    "availability": [
+      { "start_time": "08:00", "end_time": "09:00", "is_available": true },
+      { "start_time": "09:00", "end_time": "10:00", "is_available": true },
+      { "start_time": "10:00", "end_time": "11:00", "is_available": false },
+      { "start_time": "11:00", "end_time": "12:00", "is_available": true },
+      { "start_time": "12:00", "end_time": "13:00", "is_available": true },
+      { "start_time": "13:00", "end_time": "14:00", "is_available": true },
+      { "start_time": "14:00", "end_time": "15:00", "is_available": false },
+      { "start_time": "15:00", "end_time": "16:00", "is_available": true },
+      { "start_time": "16:00", "end_time": "17:00", "is_available": true },
+      { "start_time": "17:00", "end_time": "18:00", "is_available": true },
+      { "start_time": "18:00", "end_time": "19:00", "is_available": true },
+      { "start_time": "19:00", "end_time": "20:00", "is_available": true },
+      { "start_time": "20:00", "end_time": "21:00", "is_available": true },
+      { "start_time": "21:00", "end_time": "22:00", "is_available": true }
+    ],
+    "price_per_hour": 95,
+    "currency": "USD",
+    "rating": 4.9,
+    "reviews_count": 150,
+    "sport_type": "Futsal",
+    "capacity": 10
+  }
+} 

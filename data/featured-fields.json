@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "id": 215,
+      "name": "Elite Soccer Complex",
+      "location_summary": "Downtown Sports Center",
+      "sport_type": "Soccer",
+      "rating": 4.8,
+      "main_image_url": "https://example.com/images/elite_soccer.jpg",
+      "capacity": 22,
+      "availability_summary": "Available today",
+      "price_per_hour": 75,
+      "currency": "USD",
+      "reviews_count": 124,
+      "key_facilities": ["Floodlights", "Parking", "Changing Rooms"]
+    },
+    {
+      "id": 301,
+      "name": "Premium Basketball Court",
+      "location_summary": "City Sports Hub",
+      "sport_type": "Basketball",
+      "rating": 4.9,
+      "main_image_url": "https://example.com/images/premium_basketball.jpg",
+      "capacity": 10,
+      "availability_summary": "Available now",
+      "price_per_hour": 45,
+      "currency": "USD",
+      "reviews_count": 89,
+      "key_facilities": ["Indoor", "Air Conditioning", "Sound System"]
+    },
+    {
+      "id": 402,
+      "name": "Futsal Indoor Semarang Jaya",
+      "location_summary": "Tembalang, Semarang",
+      "sport_type": "Futsal",
+      "rating": 4.9,
+      "main_image_url": "https://example.com/images/futsal_jaya.jpg",
+      "capacity": 10,
+      "availability_summary": "Available today",
+      "price_per_hour": 95,
+      "currency": "USD",
+      "reviews_count": 150,
+      "key_facilities": ["Indoor", "Parking", "Changing Rooms"]
+    },
+    {
+      "id": 405,
+      "name": "Badminton Court Elite",
+      "location_summary": "Recreation Center",
+      "sport_type": "Badminton",
+      "rating": 4.6,
+      "main_image_url": "https://example.com/images/badminton_elite.jpg",
+      "capacity": 4,
+      "availability_summary": "Available now",
+      "price_per_hour": 60,
+      "currency": "USD",
+      "reviews_count": 67,
+      "key_facilities": ["Indoor", "Air Conditioning", "Equipment Rental"]
+    }
+  ]
+} 

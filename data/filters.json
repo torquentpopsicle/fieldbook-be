@@ -1,0 +1,26 @@
+{
+  "data": {
+    "price_range": { "min": 0, "max": 500 },
+    "features": [
+      { "id": "indoor", "name": "Indoor" },
+      { "id": "outdoor", "name": "Outdoor" },
+      { "id": "parking", "name": "Parking" },
+      { "id": "changing_rooms", "name": "Changing Rooms" },
+      { "id": "equipment_rental", "name": "Equipment Rental" },
+      { "id": "floodlights", "name": "Floodlights" },
+      { "id": "air_conditioning", "name": "Air Conditioning" },
+      { "id": "sound_system", "name": "Sound System" },
+      { "id": "toilet", "name": "Toilet" },
+      { "id": "kantin", "name": "Kantin" },
+      { "id": "mushola", "name": "Mushola" }
+    ],
+    "sport_types": [
+      { "id": 1, "name": "Soccer" },
+      { "id": 2, "name": "Basketball" },
+      { "id": 3, "name": "Futsal" },
+      { "id": 4, "name": "Badminton" },
+      { "id": 5, "name": "Tennis" },
+      { "id": 6, "name": "Volleyball" }
+    ]
+  }
+} 

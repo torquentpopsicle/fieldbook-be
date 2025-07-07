@@ -1,0 +1,88 @@
+{
+  "data": [
+    {
+      "id": 402,
+      "name": "Futsal Indoor Semarang Jaya",
+      "location_summary": "Tembalang, Semarang",
+      "sport_type": "Futsal",
+      "rating": 4.9,
+      "main_image_url": "https://example.com/images/futsal_jaya.jpg",
+      "capacity": 10,
+      "availability_summary": "Available today",
+      "price_per_hour": 95000,
+      "currency": "Rp",
+      "reviews_count": 150,
+      "key_facilities": ["Indoor", "Parking", "Changing Rooms"]
+    },
+    {
+      "id": 403,
+      "name": "Basketball Court Central",
+      "location_summary": "Central Business District",
+      "sport_type": "Basketball",
+      "rating": 4.7,
+      "main_image_url": "https://example.com/images/basketball_central.jpg",
+      "capacity": 12,
+      "availability_summary": "Available tomorrow",
+      "price_per_hour": 120000,
+      "currency": "Rp",
+      "reviews_count": 89,
+      "key_facilities": ["Indoor", "Air Conditioning", "Sound System"]
+    },
+    {
+      "id": 404,
+      "name": "Soccer Field Premium",
+      "location_summary": "Sports Complex Area",
+      "sport_type": "Soccer",
+      "rating": 4.8,
+      "main_image_url": "https://example.com/images/soccer_premium.jpg",
+      "capacity": 22,
+      "availability_summary": "Available today",
+      "price_per_hour": 150000,
+      "currency": "Rp",
+      "reviews_count": 234,
+      "key_facilities": ["Outdoor", "Floodlights", "Parking"]
+    },
+    {
+      "id": 405,
+      "name": "Badminton Court Elite",
+      "location_summary": "Recreation Center",
+      "sport_type": "Badminton",
+      "rating": 4.6,
+      "main_image_url": "https://example.com/images/badminton_elite.jpg",
+      "capacity": 4,
+      "availability_summary": "Available now",
+      "price_per_hour": 60000,
+      "currency": "Rp",
+      "reviews_count": 67,
+      "key_facilities": ["Indoor", "Air Conditioning", "Equipment Rental"]
+    },
+    {
+      "id": 406,
+      "name": "Tennis Court Pro",
+      "location_summary": "Country Club Area",
+      "sport_type": "Tennis",
+      "rating": 4.9,
+      "main_image_url": "https://example.com/images/tennis_pro.jpg",
+      "capacity": 4,
+      "availability_summary": "Available today",
+      "price_per_hour": 180000,
+      "currency": "Rp",
+      "reviews_count": 156,
+      "key_facilities": ["Outdoor", "Floodlights", "Equipment Rental"]
+    },
+    {
+      "id": 407,
+      "name": "Volleyball Arena",
+      "location_summary": "University Sports Complex",
+      "sport_type": "Volleyball",
+      "rating": 4.5,
+      "main_image_url": "https://example.com/images/volleyball_arena.jpg",
+      "capacity": 12,
+      "availability_summary": "Available tomorrow",
+      "price_per_hour": 90000,
+      "currency": "Rp",
+      "reviews_count": 78,
+      "key_facilities": ["Indoor", "Changing Rooms", "Parking"]
+    }
+  ]
+} 
