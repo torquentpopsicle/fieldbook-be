@@ -40,7 +40,7 @@ class FieldService {
       }
 
       if (location) {
-        whereConditions.push(`f.location_summary ILIKE $${valueIndex}`);
+        whereConditions.push(`f.address ILIKE $${valueIndex}`);
         values.push(`%${location}%`);
         valueIndex++;
       }
@@ -88,7 +88,7 @@ class FieldService {
         SELECT DISTINCT
           f.id,
           f.name,
-          f.location_summary,
+          f.address,
           f.sport_type,
           f.rating,
           f.reviews_count,
@@ -96,6 +96,9 @@ class FieldService {
           f.availability_summary,
           f.price_per_hour,
           f.currency,
+          f.description,
+          f.images,
+          f.is_active,
           f.created_at,
           f.updated_at,
           ARRAY_AGG(DISTINCT fac.name) FILTER (WHERE fac.name IS NOT NULL) as key_facilities
@@ -104,7 +107,7 @@ class FieldService {
         LEFT JOIN field_facilities ff ON f.id = ff.field_id
         LEFT JOIN facilities fac ON ff.facility_id = fac.id
         ${whereClause}
-        GROUP BY f.id, f.name, f.location_summary, f.sport_type, f.rating, 
+        GROUP BY f.id, f.name, f.address, f.sport_type, f.rating, 
                  f.reviews_count, f.capacity, f.availability_summary, 
                  f.price_per_hour, f.currency, f.created_at, f.updated_at
         ORDER BY f.created_at DESC
@@ -208,10 +211,10 @@ class FieldService {
       // Insert field
       const fieldQuery = `
         INSERT INTO fields (
-          name, location_summary, address, sport_type, sport_type_id,
+          name, address, sport_type, sport_type_id,
           rating, reviews_count, capacity, availability_summary,
           price_per_hour, currency, description, images
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
         RETURNING *
       `;
 
@@ -224,7 +227,6 @@ class FieldService {
 
       const fieldResult = await client.query(fieldQuery, [
         fieldData.name,
-        fieldData.location_summary,
         fieldData.address,
         fieldData.sport_type,
         sportTypeId,

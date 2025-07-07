@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS facilities (
 CREATE TABLE IF NOT EXISTS fields (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  location_summary VARCHAR(255),
   address TEXT,
   sport_type_id INTEGER REFERENCES sport_types(id),
   sport_type VARCHAR(50), -- Keep for backward compatibility
@@ -66,8 +65,7 @@ CREATE TABLE IF NOT EXISTS field_availability (
 );
 
 -- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_fields_sport_type ON fields(sport_type);
-CREATE INDEX IF NOT EXISTS idx_fields_location ON fields(location_summary);
+CREATE INDEX IF NOT EXISTS idx_fields_address ON fields(address);
 CREATE INDEX IF NOT EXISTS idx_fields_price ON fields(price_per_hour);
 CREATE INDEX IF NOT EXISTS idx_fields_rating ON fields(rating);
 CREATE INDEX IF NOT EXISTS idx_field_facilities_field_id ON field_facilities(field_id);

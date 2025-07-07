@@ -166,7 +166,7 @@ class BookingService {
         SELECT 
           b.*,
           f.name as field_name,
-          f.location_summary as field_location,
+          f.address as field_location,
           u.name as user_name,
           u.email as user_email
         FROM bookings b
@@ -217,7 +217,7 @@ class BookingService {
         SELECT 
           b.*,
           f.name as field_name,
-          f.location_summary as field_location,
+          f.address as field_location,
           f.address as field_address,
           u.name as user_name,
           u.email as user_email

@@ -13,16 +13,7 @@ const options = {
         email: 'support@fieldbook.com',
       },
     },
-    servers: [
-      {
-        url: 'http://localhost:8000',
-        description: 'Development server',
-      },
-      {
-        url: 'https://fieldbook-be.onrender.com',
-        description: 'Production server',
-      },
-    ],
+
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -37,10 +28,6 @@ const options = {
           properties: {
             id: { type: 'integer', example: 402 },
             name: { type: 'string', example: 'Futsal Indoor Semarang Jaya' },
-            location_summary: {
-              type: 'string',
-              example: 'Tembalang, Semarang',
-            },
             address: {
               type: 'string',
               example: 'Jl. Pahlawan No. 10, Semarang',
@@ -64,7 +51,7 @@ const options = {
               type: 'string',
               example: 'Premium indoor futsal facility with modern amenities',
             },
-            facilities: {
+            key_facilities: {
               type: 'array',
               items: { type: 'string' },
               example: ['Indoor', 'Parking', 'Changing Rooms'],
@@ -78,10 +65,6 @@ const options = {
           type: 'object',
           properties: {
             name: { type: 'string', example: 'Futsal Indoor Semarang Jaya' },
-            location_summary: {
-              type: 'string',
-              example: 'Tembalang, Semarang',
-            },
             address: {
               type: 'string',
               example: 'Jl. Pahlawan No. 10, Semarang',
@@ -104,19 +87,13 @@ const options = {
               type: 'string',
               example: 'Premium indoor futsal facility with modern amenities',
             },
-            facilities: {
+            key_facilities: {
               type: 'array',
               items: { type: 'string' },
               example: ['Indoor', 'Parking', 'Changing Rooms'],
             },
           },
-          required: [
-            'name',
-            'location_summary',
-            'address',
-            'sport_type',
-            'price_per_hour',
-          ],
+          required: ['name', 'address', 'sport_type', 'price_per_hour'],
         },
         FieldUpdate: {
           type: 'object',
@@ -124,10 +101,6 @@ const options = {
             'All properties are optional. Only provided fields will be updated. Fields omitted from the request will remain unchanged.',
           properties: {
             name: { type: 'string', example: 'Futsal Indoor Semarang Jaya' },
-            location_summary: {
-              type: 'string',
-              example: 'Tembalang, Semarang',
-            },
             address: {
               type: 'string',
               example: 'Jl. Pahlawan No. 10, Semarang',
@@ -150,7 +123,7 @@ const options = {
               type: 'string',
               example: 'Premium indoor futsal facility with modern amenities',
             },
-            facilities: {
+            key_facilities: {
               type: 'array',
               items: { type: 'string' },
               example: ['Indoor', 'Parking', 'Changing Rooms'],

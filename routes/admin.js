@@ -104,7 +104,6 @@ router.get('/fields', async (req, res) => {
  *             type: object
  *             required:
  *               - name
- *               - location_summary
  *               - address
  *               - sport_type
  *               - price_per_hour
@@ -112,9 +111,6 @@ router.get('/fields', async (req, res) => {
  *               name:
  *                 type: string
  *                 example: "New Futsal Arena"
- *               location_summary:
- *                 type: string
- *                 example: "Downtown, Jakarta"
  *               address:
  *                 type: string
  *                 example: "Jl. Sudirman No. 123, Jakarta"
@@ -136,11 +132,12 @@ router.get('/fields', async (req, res) => {
  *               images:
  *                 type: string
  *                 example: "https://example.com/images/field1.jpg"
- *               facilities:
+ *               key_facilities:
  *                 type: array
  *                 items:
  *                   type: string
  *                 example: ["Indoor", "Parking", "Changing Rooms"]
+ *                 description: "Alternative field name for facilities (for backward compatibility)"
  *               availability_summary:
  *                 type: string
  *                 example: "Available today"
@@ -168,42 +165,34 @@ router.post('/fields', async (req, res) => {
   try {
     const {
       name,
-      location_summary,
+      address,
       sport_type,
       capacity,
       price_per_hour,
       currency,
       key_facilities,
-      address,
       description,
       images,
     } = req.body;
 
     // Validate required fields
-    if (
-      !name ||
-      !location_summary ||
-      !address ||
-      !sport_type ||
-      !price_per_hour
-    ) {
+    if (!name || !address || !sport_type || !price_per_hour) {
       return res.status(400).json({
         message:
-          'Missing required fields: name, location_summary, address, sport_type, price_per_hour',
+          'Missing required fields: name, address, sport_type, price_per_hour',
         error: 'Bad Request',
       });
     }
 
     const fieldData = {
       name,
-      location_summary,
       address,
       sport_type,
       capacity: capacity ? parseInt(capacity) : 10,
       price_per_hour: parseFloat(price_per_hour),
       currency: currency || 'Rp',
       facilities: key_facilities || [],
-      description,
+      description: description || '',
       images: images || '',
       availability_summary: req.body.availability_summary || '',
     };
@@ -221,6 +210,7 @@ router.post('/fields', async (req, res) => {
       adminEmail: req.user.email,
       fieldId: newField.id,
       fieldName: newField.name,
+      facilitiesCount: key_facilities ? key_facilities.length : 0,
       timestamp: new Date().toISOString(),
     });
 
@@ -264,7 +254,7 @@ router.post('/fields', async (req, res) => {
  *               name:
  *                 type: string
  *                 example: "Updated Field Name"
- *               location_summary:
+ *               address:
  *                 type: string
  *                 example: "New Location"
  *               sport_type:

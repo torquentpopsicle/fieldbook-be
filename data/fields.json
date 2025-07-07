@@ -6,7 +6,7 @@
       "location_summary": "Pahlawan, Semarang",
       "sport_type": "Futsal",
       "rating": 4.9,
-      "main_image_url": "https://example.com/images/garuda_futsal_1.jpg",
+      "main_image_url": "https://jasakontraktorlapangan.id/wp-content/uploads/2023/05/Analisa-Bisnis-Lapangan-Futsal.jpg",
       "capacity": 10,
       "availability_summary": "Available today",
       "price_per_hour": 95000,
@@ -20,7 +20,8 @@
         "Kantin",
         "Mushola",
         "Air Conditioning"
-      ]
+      ],
+      "address": "Pahlawan, Semarang"
     },
     {
       "id": 402,
@@ -28,13 +29,14 @@
       "location_summary": "Tembalang, Semarang",
       "sport_type": "Futsal",
       "rating": 4.9,
-      "main_image_url": "https://example.com/images/futsal_jaya.jpg",
+      "main_image_url": "https://jasakontraktorlapangan.id/wp-content/uploads/2023/05/Analisa-Bisnis-Lapangan-Futsal.jpg",
       "capacity": 10,
       "availability_summary": "Available today",
       "price_per_hour": 95000,
       "currency": "Rp",
       "reviews_count": 150,
-      "key_facilities": ["Indoor", "Parking", "Changing Rooms"]
+      "key_facilities": ["Indoor", "Parking", "Changing Rooms"],
+      "address": "Tembalang, Semarang"
     },
     {
       "id": 403,
@@ -42,13 +44,14 @@
       "location_summary": "Central Business District",
       "sport_type": "Basketball",
       "rating": 4.7,
-      "main_image_url": "https://example.com/images/basketball_central.jpg",
+      "main_image_url": "https://jasakontraktorlapangan.id/wp-content/uploads/2023/05/Analisa-Bisnis-Lapangan-Futsal.jpg",
       "capacity": 12,
       "availability_summary": "Available tomorrow",
       "price_per_hour": 120000,
       "currency": "Rp",
       "reviews_count": 89,
-      "key_facilities": ["Indoor", "Air Conditioning", "Sound System"]
+      "key_facilities": ["Indoor", "Air Conditioning", "Sound System"],
+      "address": "Central Business District"
     },
     {
       "id": 404,
@@ -56,13 +59,14 @@
       "location_summary": "Sports Complex Area",
       "sport_type": "Soccer",
       "rating": 4.8,
-      "main_image_url": "https://example.com/images/soccer_premium.jpg",
+      "main_image_url": "https://jasakontraktorlapangan.id/wp-content/uploads/2023/05/Analisa-Bisnis-Lapangan-Futsal.jpg",
       "capacity": 22,
       "availability_summary": "Available today",
       "price_per_hour": 150000,
       "currency": "Rp",
       "reviews_count": 234,
-      "key_facilities": ["Outdoor", "Floodlights", "Parking"]
+      "key_facilities": ["Outdoor", "Floodlights", "Parking"],
+      "address": "Sports Complex Area"
     },
     {
       "id": 405,
@@ -70,13 +74,14 @@
       "location_summary": "Recreation Center",
       "sport_type": "Badminton",
       "rating": 4.6,
-      "main_image_url": "https://example.com/images/badminton_elite.jpg",
+      "main_image_url": "https://jasakontraktorlapangan.id/wp-content/uploads/2023/05/Analisa-Bisnis-Lapangan-Futsal.jpg",
       "capacity": 4,
       "availability_summary": "Available now",
       "price_per_hour": 60000,
       "currency": "Rp",
       "reviews_count": 67,
-      "key_facilities": ["Indoor", "Air Conditioning", "Equipment Rental"]
+      "key_facilities": ["Indoor", "Air Conditioning", "Equipment Rental"],
+      "address": "Recreation Center"
     },
     {
       "id": 406,
@@ -84,13 +89,14 @@
       "location_summary": "Country Club Area",
       "sport_type": "Tennis",
       "rating": 4.9,
-      "main_image_url": "https://example.com/images/tennis_pro.jpg",
+      "main_image_url": "https://jasakontraktorlapangan.id/wp-content/uploads/2023/05/Analisa-Bisnis-Lapangan-Futsal.jpg",
       "capacity": 4,
       "availability_summary": "Available today",
       "price_per_hour": 180000,
       "currency": "Rp",
       "reviews_count": 156,
-      "key_facilities": ["Outdoor", "Floodlights", "Equipment Rental"]
+      "key_facilities": ["Outdoor", "Floodlights", "Equipment Rental"],
+      "address": "Country Club Area"
     },
     {
       "id": 407,
@@ -98,13 +104,14 @@
       "location_summary": "University Sports Complex",
       "sport_type": "Volleyball",
       "rating": 4.5,
-      "main_image_url": "https://example.com/images/volleyball_arena.jpg",
+      "main_image_url": "https://jasakontraktorlapangan.id/wp-content/uploads/2023/05/Analisa-Bisnis-Lapangan-Futsal.jpg",
       "capacity": 12,
       "availability_summary": "Available tomorrow",
       "price_per_hour": 90000,
       "currency": "Rp",
       "reviews_count": 78,
-      "key_facilities": ["Indoor", "Changing Rooms", "Parking"]
+      "key_facilities": ["Indoor", "Changing Rooms", "Parking"],
+      "address": "University Sports Complex"
     }
   ]
 }

@@ -76,13 +76,13 @@ class DatabaseMigration {
         const fieldResult = await this.pool.query(
           `
           INSERT INTO fields (
-            id, name, location_summary, sport_type, sport_type_id, rating, 
+            id, name, address, sport_type, sport_type_id, rating, 
             reviews_count, capacity, availability_summary, 
-            price_per_hour, currency, images
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+            price_per_hour, currency, images, description
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
           ON CONFLICT (id) DO UPDATE SET
             name = EXCLUDED.name,
-            location_summary = EXCLUDED.location_summary,
+            address = EXCLUDED.address,
             sport_type = EXCLUDED.sport_type,
             sport_type_id = EXCLUDED.sport_type_id,
             rating = EXCLUDED.rating,
@@ -92,13 +92,14 @@ class DatabaseMigration {
             price_per_hour = EXCLUDED.price_per_hour,
             currency = EXCLUDED.currency,
             images = EXCLUDED.images,
+            description = EXCLUDED.description,
             updated_at = CURRENT_TIMESTAMP
           RETURNING id
         `,
           [
             field.id,
             field.name,
-            field.location_summary,
+            field.address,
             field.sport_type,
             sportTypeId,
             field.rating,
@@ -108,6 +109,7 @@ class DatabaseMigration {
             field.price_per_hour,
             field.currency,
             imageUrl,
+            field.description || 'No description provided.',
           ]
         );
 
